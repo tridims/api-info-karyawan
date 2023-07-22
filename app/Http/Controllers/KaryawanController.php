@@ -79,12 +79,11 @@ class KaryawanController extends Controller
      */
     public function destroy(Karyawan $karyawan)
     {
-        //
         $karyawan->delete();
 
         return response()->json([
             'message' => 'Data berhasil dihapus'
-        ], 204);
+        ], 200);
     }
 
     // tambilkan tiga karyawan terbaru yang bergabung
@@ -106,13 +105,14 @@ class KaryawanController extends Controller
     }
 
     // karyawan dengan sisa cuti
-    public function karyawanWithRemainingCuti()
+    public function karyawanWithRemainingCuti(Request $request)
     {
         $karyawan = Karyawan::all();
+        $tahun = $request->query('tahun') ?? date('Y');
 
         // sum lama_cuti for each cuti that the karyawan had
         foreach ($karyawan as $k) {
-            $k->sisa_cuti_tahun_ini = 12 - $k->cuti->whereBetween('tanggal_cuti', [date('Y') . '-01-01', date('Y') . '-12-31'])->sum('lama_cuti');
+            $k->sisa_cuti_tahun_ini = 12 - $k->cuti->whereBetween('tanggal_cuti', [$tahun . '-01-01', $tahun . '-12-31'])->sum('lama_cuti');
         }
 
         return response()->json([
