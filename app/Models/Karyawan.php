@@ -13,4 +13,12 @@ class Karyawan extends Model
     {
         return $this->hasMany(Cuti::class);
     }
+
+    protected $fillable = [
+        'nomor_induk',
+        'nama',
+        'alamat',
+        'tanggal_lahir',
+        'tanggal_bergabung',
+    ];
 }
